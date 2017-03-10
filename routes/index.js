@@ -70,12 +70,38 @@ router.route("/register").get(function(req, res) { // 到达此路径则渲染re
 });
 
 /* GET home page. */
-router.get("/home", function(req, res) {
+router.route("/home").get(function(req, res) {
     if (!req.session.user) { //到达/home路径首先判断是否已经登录
         req.session.error = "请先登录"
         res.redirect("/login"); //未登录则重定向到 /login 路径
-    }
+    };
     res.render("home", { title: 'Home' }); //已登录则渲染home页面
+}).post(function(req, res) {
+    var Content = global.dbHandel.getModel('content');
+    var uname = req.body.uname;
+    var uvalue = req.body.uvalue;
+    if (uvalue == undefined) {
+        Content.find({}, function(err, doc) { // 同理 /login 路径的处理方式
+            if (err) {
+                res.send(500);
+                req.session.error = '网络异常错误！';
+                console.log(err);
+            } else {
+                res.send(doc);
+            }
+        });
+    } else {
+        Content.create({ name: uname, value: uvalue }, function(err, doc) {
+            if (err) {
+                res.send(500);
+                req.session.error = '网络异常错误！';
+                console.log(err);
+            } else {
+                req.session.error = '留言发布成功！';
+                res.send(200);
+            }
+        })
+    }
 });
 
 /* GET logout page. */

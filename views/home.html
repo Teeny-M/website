@@ -15,6 +15,75 @@
         a:hover {
             text-decoration: underline;
         }
+        
+        ul,
+        li {
+            text-decoration: none;
+            list-style: none;
+        }
+        
+        #main-content {
+            width: 600px;
+            margin: 0 auto;
+        }
+        
+        #content {
+            width: 100%;
+            height: 68px;
+            margin: 0px;
+            padding: 0px;
+            border: 1px solid #cccccc;
+            ;
+            font-size: 14px;
+            word-wrap: break-word;
+            line-height: 18px;
+            overflow: hidden;
+            outline: none;
+            resize: none;
+        }
+        
+        #summit {
+            width: 60px;
+            height: 28px;
+            background: #ffc09f;
+            color: #fff;
+            border: 1px solid #fbbd9e;
+            border-radius: 5%;
+            box-shadow: none;
+            cursor: default;
+        }
+        
+        .cname {
+            width: 60%;
+            height: 120px;
+            border: 1px solid #cccccc;
+            margin: 10px auto;
+            position: relative;
+        }
+        
+        #name {
+            text-align: left;
+            border-bottom: 1px solid #cccccc;
+        }
+        
+        #mvalue {
+            text-align: left;
+            text-indent: 25px;
+        }
+        
+        .delete {
+            width: 60px;
+            height: 28px;
+            background: #ffc09f;
+            color: #fff;
+            border: 1px solid #fbbd9e;
+            border-radius: 5%;
+            box-shadow: none;
+            cursor: default;
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+        }
     </style>
 </head>
 
@@ -22,9 +91,73 @@
     <h1>Your name:
         <%- user.name %>
     </h1>
+    <p id="username">
+        <%- user.name %>
+    </p>
     <p>Welcome to your home ~</p>
     <p><a href="/logout">我要注销 </a>
     </p>
+    <div id="main-content">
+        <textarea id="content"></textarea>
+        <input id="summit" type="submit" value="发布">
+    </div>
+    <div>
+        <ul id="oul">
+
+        </ul>
+    </div>
+
 </body>
+<script type="text/javascript" src="javascripts/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var username = $('#username').text();
+        var data = {
+            "uname": username,
+        }
+        $.ajax({
+            url: '/home',
+            type: 'post',
+            data: data,
+            success: function(data, status) {
+                if (status == 'success') {
+                    var oul = $('#oul');
+                    for (var i = 0, j = data.length; i < j; i++) {
+                        oul.append("<li class='cname'><p id='name'>" + data[i].name + "</p><p id='mvalue'>" + data[i].value + "<input class='delete' type='submit' value='删除'></li>")
+                    }
+                }
+            },
+            error: function(data, err) {
+                console.log(err);
+            }
+        });
+        $('#summit').click(function() {
+            var username = $('#username').text();
+            var value = $('#content').val();
+            var data = {
+                "uname": username,
+                "uvalue": value
+            }
+            $.ajax({
+                url: '/home',
+                type: 'post',
+                data: data,
+                success: function(data, status) {
+                    if (status == 'success') {
+                        var oul = $('#oul');
+                        var oli = oul.append("<li class='cname'><p id='name'>" + username + "</p><p id='mvalue'>" + value + "</p><input class='delete' type='submit' value='删除'></li>")
+                        $('#content').val('');
+                    }
+                },
+                error: function(data, err) {
+                    console.log(err);
+                }
+            });
+        });
+        $('input.delete[1]').click(function() {
+            console.log(1111111111111111111111111);
+        })
+    })
+</script>
 
 </html>
