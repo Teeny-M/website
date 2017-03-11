@@ -123,7 +123,7 @@
                 if (status == 'success') {
                     var oul = $('#oul');
                     for (var i = 0, j = data.length; i < j; i++) {
-                        oul.append("<li class='cname'><p id='name'>" + data[i].name + "</p><p id='mvalue'>" + data[i].value + "<input class='delete' type='submit' value='删除'></li>")
+                        oul.prepend("<li class='cname'><p id='name'>" + data[i].name + "</p><p id='mvalue'>" + data[i].value + "<input class='delete' type='submit' value='删除'></li>")
                     }
                     $(function() {
                         $('.delete').click(function() {
@@ -175,7 +175,7 @@
                 success: function(data, status) {
                     if (status == 'success') {
                         var oul = $('#oul');
-                        var oli = oul.append("<li class='cname'><p id='name'>" + username + "</p><p id='mvalue'>" + value + "</p><input class='delete' type='submit' value='删除'></li>")
+                        var oli = oul.prepend("<li class='cname'><p id='name'>" + username + "</p><p id='mvalue'>" + value + "</p><input class='delete' type='submit' value='删除'></li>")
                         $('#content').val('');
                     }
                 },
