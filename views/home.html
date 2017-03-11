@@ -125,6 +125,36 @@
                     for (var i = 0, j = data.length; i < j; i++) {
                         oul.append("<li class='cname'><p id='name'>" + data[i].name + "</p><p id='mvalue'>" + data[i].value + "<input class='delete' type='submit' value='删除'></li>")
                     }
+                    $(function() {
+                        $('.delete').click(function() {
+                            var dli = $(this).parent().parent();
+                            var username = $(this).parent().prev().text();
+                            console.log(username);
+                            var value = $(this).parent().text();
+                            console.log(value);
+                            var data = {
+                                "uname": username,
+                                "uvalue": value,
+                                "udelete": 1
+                            }
+                            $.ajax({
+                                url: '/home',
+                                type: 'post',
+                                data: data,
+                                success: function(data, status) {
+                                    if (status == 'success') {
+                                        console.log('1');
+                                        dli.remove();
+                                    }
+                                },
+                                error: function(data, err) {
+                                    console.log(err);
+                                }
+                            })
+
+                        })
+                    })
+
                 }
             },
             error: function(data, err) {
@@ -154,9 +184,7 @@
                 }
             });
         });
-        $('input.delete[1]').click(function() {
-            console.log(1111111111111111111111111);
-        })
+
     })
 </script>
 

@@ -80,6 +80,8 @@ router.route("/home").get(function(req, res) {
     var Content = global.dbHandel.getModel('content');
     var uname = req.body.uname;
     var uvalue = req.body.uvalue;
+    var udelete = req.body.udelete;
+    console.log(udelete);
     if (uvalue == undefined) {
         Content.find({}, function(err, doc) { // 同理 /login 路径的处理方式
             if (err) {
@@ -90,6 +92,17 @@ router.route("/home").get(function(req, res) {
                 res.send(doc);
             }
         });
+    } else if (udelete == 1) {
+        Content.remove({ name: uname, value: uvalue }, function(err, result) {
+            if (err) {
+                res.send(500);
+                req.session.error = '网络异常错误！';
+                console.log(err);
+            } else {
+                req.session.error = '留言删除成功！';
+                res.send(200);
+            }
+        })
     } else {
         Content.create({ name: uname, value: uvalue }, function(err, doc) {
             if (err) {
